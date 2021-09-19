@@ -1,0 +1,26 @@
+{
+  "name": "quoteable.js",
+  "version": "1.0.0",
+  "description": "quoteable.js utilizes the quoteable API",
+  "main": "src/index.js",
+  "types": "types/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MattPlays/quoteable.js.git"
+  },
+  "keywords": [
+    "quotes",
+    "API",
+    "quoteable"
+  ],
+  "author": "MattPlays (https://github.com/MattPlays/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MattPlays/quoteable.js/issues"
+  },
+  "homepage": "https://github.com/MattPlays/quoteable.js#readme",
+  "dependencies": {
+    "axios": "^0.21.4",
+    "jsdoc-to-markdown": "^7.0.1"
+  }
+}
