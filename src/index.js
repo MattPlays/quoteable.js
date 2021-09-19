@@ -1,6 +1,4 @@
 const axios = require("axios").default;
-const Quote = require("./Quote");
-const Author = require("./Author");
 const instance = axios.create({
     method: "GET",
     baseURL: "https://api.quotable.io",
@@ -8,6 +6,48 @@ const instance = axios.create({
         "Accept": "application/json"
     }
 })
+class Quote {
+    /**
+     * 
+     * @param {string} _id 
+     * @param {string} content 
+     * @param {string} author 
+     * @param {string} authorSlug 
+     * @param {number} length 
+     * @param {string[]} tags 
+     */
+    constructor(_id, content, author, authorSlug, length, tags) {
+        this._id = _id;
+        this.content = content;
+        this.author = author;
+        this.authorSlug = authorSlug;
+        this.length = length;
+        this.tags = tags;
+    }
+}
+class Author {
+    /**
+     * 
+     * @param {string} _id 
+     * @param {string} bio 
+     * @param {string} description 
+     * @param {string} link 
+     * @param {string} name 
+     * @param {string} slug 
+     * @param {number} quoteCount 
+     * @param {Quote[] | Promise<Author>} [quotes] 
+     */
+    constructor(_id, bio, description, link, name, slug, quoteCount, quotes) {
+        this._id = _id;
+        this.bio = bio;
+        this.description = description;
+        this.link = link;
+        this.name = name;
+        this.slug = slug;
+        this.quoteCount = quoteCount;
+        this.quotes = quotes || null
+    }
+}
 class Quoteable {
     constructor(){};
     /**
@@ -107,22 +147,19 @@ class Quoteable {
                 page: data.page,
                 totalPages: data.totalPages,
                 lastItemIndex: data.lastItemIndex,
-                results: data.results.map((r) => {return new Author(r._id, r.bio, r.description, r.link, r.name, r.slug, r.quoteCount, this.GetAuthorByID(r._id).then((d) => {
-                    return d.quotes
-                }))})
+                results: data.results.map((r) => {return new Author(r._id, r.bio, r.description, r.link, r.name, r.slug, r.quoteCount)})
             }
         }).catch((err) => {throw new Error(err)});
     }
     /**
      * 
      * @param {string} id
-     * @returns {Promise<Author} 
      */
     async GetAuthorByID(id) {
         return instance({
             url: `/authors/${id}`
         }).then(({data}) => {
-            return new Author(data._id, data.bio, data.description, data.link, data.name, data.slug, data.quoteCount,data.quotes.map((r) => {return new Quote(r._id, r.content, r.author, r.authorSlug, r.length, r.tags)}))
+            return data;
         }).catch((err) => {throw new Error(err)});
     }
     /**
